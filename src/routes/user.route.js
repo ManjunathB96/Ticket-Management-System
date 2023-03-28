@@ -5,11 +5,10 @@ import { userAuth } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-
 //route to get a single user by their user id
 router.get('', userAuth, userController.getAll);
 
-//route to create a new user
+//route to create a new admin/mentor
 router.post('', newUserValidator, userController.registration);
 
 //route to login
