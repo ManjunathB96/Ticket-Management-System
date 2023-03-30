@@ -35,8 +35,8 @@ export const registration = async (req, res, next) => {
       message: 'Registration completed'
     });
   } catch (error) {
-    res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
       message: `${error}`
     });
   }
@@ -52,15 +52,15 @@ export const login = async (req, res, next) => {
   try {
     const data = await UserService.login(req.body);
     if (data) {
-      res.status(HttpStatus.CREATED).json({
-        code: HttpStatus.CREATED,
+      res.status(HttpStatus.ACCEPTED).json({
+        code: HttpStatus.ACCEPTED,
         data: data,
         message: 'login successfully'
       });
     }
   } catch (error) {
-    res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
+    res.status(HttpStatus.UNAUTHORIZED).json({
+      code: HttpStatus.UNAUTHORIZED,
       message: `${error}`
     });
   }
