@@ -2,6 +2,9 @@ import { Schema, model } from 'mongoose';
 
 const ticketSchema = new Schema(
   {
+    CIC_Id: {
+      type: String
+    },
     ticketName: {
       type: String
     },
