@@ -2,6 +2,7 @@ import User from '../models/user.model';
 const bcrypt = require('bcrypt');
 import jwt from 'jsonwebtoken';
 
+
 //get all admin/mentor
 export const getAll = async () => {
   const data = await User.find();
@@ -22,13 +23,14 @@ export const registration = async (body) => {
   }
 };
 
+
 //create admin/mentor login
 export const login = async (body) => {
   const data = await User.findOne({ email: body.email });
   const isMatch = bcrypt.compareSync(body.password, data.password);
   if (data && isMatch) {
     const token = jwt.sign(
-      { email: data.email, _id: data._id },
+      { email: data.email, role: data.role, _id: data._id },
       process.env.SECRET_KEY
     );
     return token;
