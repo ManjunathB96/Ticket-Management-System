@@ -14,9 +14,13 @@ export const getSingleTicket = async (CIC_Id) => {
 //raise new ticket
 export const raiseNewTicket = async (req) => {
   const ticket = await Ticket.findOne({ CIC_Id: req.params.CIC_Id });
-  let file = `http://localhost:3000/file/${req.file.filename}`;
- 
+
+  if (req.file && req.file.filename ) {
+    req.body.file = `http://localhost:3000/file/${req.file.filename}`;
+   }
+
   if (ticket == null) {
+
     const data = await Ticket.create({
       CIC_Id: req.params.CIC_Id,
       ticketName: req.body.ticketName,
@@ -24,30 +28,16 @@ export const raiseNewTicket = async (req) => {
       issueType: req.body.issueType,
       description: req.body.description,
       additionInfo: req.body.additionInfo,
-      file: file,
       status: req.body.status,
       assignedTo: req.body.assignedTo
     });
     return data;
   }
   let newData;
-  if (ticket) {
+  if (ticket) { 
+  
     newData = await Ticket.updateOne(
-      { CIC_Id: req.params.CIC_Id },
-      {
-        $set: {
-          CIC_Id: req.params.CIC_Id,
-          ticketName: req.body.ticketName,
-          engineerName: req.body.engineerName,
-          issueType: req.body.issueType,
-          description: req.body.description,
-          additionInfo: req.body.additionInfo,
-          file: file,
-          status: req.body.status,
-          assignedTo: req.body.assignedTo
-        }
-      }
-    );  
+      { CIC_Id: req.params.CIC_Id },req.body);  
     return newData;
   }
 };
