@@ -21,10 +21,9 @@ export const userAuth = async (req, res, next) => {
 
     const user = await jwt.verify(bearerToken, process.env.SECRET_KEY);
     req.body.userId = user.id;
+    req.body.role = user.role;
     next();
   } catch (error) {
     next(error);
   }
 };
-
-
