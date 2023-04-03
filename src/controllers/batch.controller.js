@@ -30,7 +30,6 @@ export const getAll = async (req, res, next) => {
 export const createNewBatch = async (req, res, next) => {
   try {
     const data = await BatchService.createNewBatch(req.body.userId,req.body);
-    console.log("cont data ----",data);
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,
