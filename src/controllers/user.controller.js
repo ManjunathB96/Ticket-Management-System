@@ -2,7 +2,7 @@ import HttpStatus from 'http-status-codes';
 import * as UserService from '../services/user.service';
 
 /**
- * Controller to get all Admin/mentors available
+ * Controller to get all users available
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
@@ -13,7 +13,7 @@ export const getAll = async (req, res, next) => {
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,
-      message: 'All Admin/mentors fetched successfully'
+      message: 'All users fetched successfully'
     });
   } catch (error) {
     next(error);
@@ -21,7 +21,7 @@ export const getAll = async (req, res, next) => {
 };
 
 /**
- * Controller to create a new Admin/mentors
+ * Controller to create a new users
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
@@ -32,7 +32,7 @@ export const registration = async (req, res, next) => {
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,
-      message: 'Registration completed'
+      message: 'User registration completed'
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -43,7 +43,7 @@ export const registration = async (req, res, next) => {
 };
 
 /**
- * Controller to login Admin/mentors
+ * Controller to login users
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
