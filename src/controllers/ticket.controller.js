@@ -10,8 +10,10 @@ import * as ticketService from '../services/ticket.service';
  * @param {Function} next
  */
 export const getSingleTicket = async (req, res, next) => {
+  console.log("get into controller");
   try {
     const data = await ticketService.getSingleTicket(req.params.CIC_Id);
+    console.log("data ===--->",data);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,
@@ -23,19 +25,18 @@ export const getSingleTicket = async (req, res, next) => {
 };
 
 /**
- * Controller to create a new ticket
+ * Controller to raise a new ticket
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
  */
-export const createNewTicket = async (req, res, next) => {
+export const raiseNewTicket = async (req, res, next) => {
     try {
-      const data = await ticketService.createNewTicket(req.body.userId,req.body);
-      console.log("cont data ----",data);
+      const data = await ticketService.raiseNewTicket(req);
       res.status(HttpStatus.CREATED).json({
         code: HttpStatus.CREATED,
         data: data,
-        message: 'Ticket created Successfully'
+        message: 'Ticket raised Successfully'
       });
     } catch (error) {
       res.status(HttpStatus.BAD_REQUEST).json({
@@ -46,26 +47,3 @@ export const createNewTicket = async (req, res, next) => {
   };
 
 
-  /**
- * Controller to create a new ticket
- * @param  {object} req - request object
- * @param {object} res - response object
- * @param {Function} next
- */
-export const uploadFile =async (req, res, next) => {
-  console.log("controller statred");
-  try {
-    const data = await ticketService.uploadFile(req);
-    console.log("upload file  data ----",data);
-    res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
-      data: data,
-      message: 'File uploaded successfully'
-    });
-  } catch (error) {
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
-      message: `${error}`
-    });
-  }
-};

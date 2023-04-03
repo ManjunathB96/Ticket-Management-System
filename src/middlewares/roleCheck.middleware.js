@@ -1,7 +1,7 @@
 import HttpStatus from 'http-status-codes'
 
 //Check the user is a admin or not
-export const adminCheck = async(req,res,next) => {
+export const roleCheck = async(req,res,next) => {
 
   if (req.body.role === 'Admin') {   
     next()
