@@ -14,7 +14,7 @@ const routes = () => {
  
   router.use('/users', userRoute);
   
- // router.use('/batches', batchRoute);
+  router.use('/batches', batchRoute);
 
   router.use('/tickets', ticketRoute);
  
