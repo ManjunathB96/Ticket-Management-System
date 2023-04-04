@@ -1,8 +1,5 @@
 import Batch from '../models/batch.model';
-import * as utils from '../utils/randomStrGen';
-
-
-
+import * as utils from '../utils/randomCodeGen';
 
 //get all batch
 export const getAll = async () => {
@@ -10,14 +7,9 @@ export const getAll = async () => {
   return data;
 };
 
-
 //create new batch
 export const createNewBatch = async (userId, body) => {
-
-    console.log("body details--------",body);
   const batch = await Batch.findOne({ 'batches.batchName': body.batchName });
-
-  console.log("batch =====",batch);
   if (batch == null) {
     const data = await Batch.create({
       userId: userId,
@@ -28,46 +20,50 @@ export const createNewBatch = async (userId, body) => {
         batchTechType: body.batchTechType,
         practiceHead: body.practiceHead,
         mainMentor: body.mainMentor
-       
       }
     });
     return data;
-  }  
-let newData;
-  if (batch) { 
-    newData = await Batch.findOneAndUpdate({ 'batches.batchName': body.batchName },{"batches":body},{new:true});  
+  }
+  let newData;
+  if (batch) {
+    let newBody = { ...batch.batches, ...body };
+    newData = await Batch.findOneAndUpdate(
+      { 'batches.batchName': body.batchName },
+      { batches: newBody },
+      { new: true }
+    );
     return newData;
   }
 };
 
-//customer review
+//add new engineer
 export const addNewEngineer = async (req) => {
   const batchname = req.query.batchName;
   const data = await Batch.findOne({ 'batches.batchName': batchname });
   let cicId = utils.randomeCode();
-  const obj = {};
-  obj['CIC_Id'] = cicId;
-  obj['fullName'] = req.body.fullName;
-  obj['phoneNumber'] = req.body.phoneNumber;
-  obj['email'] = req.body.email;
-  obj['status'] = req.body.status;
-
-  console.log('obj-----', obj);
+  let randomNum = 'CIC-ID-' + cicId;
+  const enggObj = {};
+  enggObj['CIC_Id'] = randomNum;
+  enggObj['fullName'] = req.body.fullName;
+  enggObj['phoneNumber'] = req.body.phoneNumber;
+  enggObj['email'] = req.body.email;
+  enggObj['status'] = req.body.status;
 
   let newData;
   if (data) {
     let engineers = data.batches.engineers;
-    let existingEngineer = engineers.filter((eng) => eng.email === obj.email);
-    console.log("existing engg---->",existingEngineer);
-    console.log("existing engg---->",existingEngineer.length);
-
-    if (existingEngineer.length) {
-      throw new Error('Engineer already exist');
+    let enggIdx;
+    for (let i = 0; i < engineers.length; i++) {
+      if (engineers[i].email === enggObj.email) {
+        enggIdx = i;
+        break;
+      }
     }
-    engineers.push(obj);
-    console.log('enggg----', engineers);
-
-    console.log('my data length ----->', data.batches.engineers.length);
+    if (enggIdx >= 0) {
+      engineers.splice(enggIdx, 1, enggObj);
+    } else {
+      engineers.push(enggObj);
+    }
     newData = await Batch.updateOne(
       { 'batches.batchName': batchname },
       {

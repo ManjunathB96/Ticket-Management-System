@@ -12,7 +12,7 @@ import * as ticketService from '../services/ticket.service';
 export const getSingleTicket = async (req, res, next) => {
   console.log("get into controller");
   try {
-    const data = await ticketService.getSingleTicket(req.params.CIC_Id);
+    const data = await ticketService.getSingleTicket(req.params.Ticket_Id);
     console.log("data ===--->",data);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -46,4 +46,25 @@ export const raiseNewTicket = async (req, res, next) => {
     }
   };
 
-
+/**
+ * Controller to followUp
+ * @param  {object} req - request object
+ * @param {object} res - response object
+ * @param {Function} next
+ */
+export const followUp = async (req, res, next) => {
+  console.log("inside controller ");
+  try {
+    const data = await ticketService.followUp(req);
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: data,
+      message: 'Follow up added successfully'
+    });
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: `${error}`
+    });
+  }
+};
