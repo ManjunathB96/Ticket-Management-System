@@ -40,6 +40,9 @@ export const createNewBatch = async (userId, body) => {
 export const addNewEngineer = async (req) => {
   const batchname = req.query.batchName;
   const data = await Batch.findOne({ 'batches.batchName': batchname });
+
+  console.log("engg service---->",data);
+
   let cicId = utils.randomeCode();
   let randomNum = 'CIC-ID-' + cicId;
   const enggObj = {};
@@ -49,8 +52,11 @@ export const addNewEngineer = async (req) => {
   enggObj['email'] = req.body.email;
   enggObj['status'] = req.body.status;
 
+  console.log("engg obj====>",enggObj);
+
   let newData;
   if (data) {
+
     let engineers = data.batches.engineers;
     let enggIdx;
     for (let i = 0; i < engineers.length; i++) {
@@ -60,6 +66,7 @@ export const addNewEngineer = async (req) => {
       }
     }
     if (enggIdx >= 0) {
+      console.log("inside if idx---->",enggIdx);
       engineers.splice(enggIdx, 1, enggObj);
     } else {
       engineers.push(enggObj);

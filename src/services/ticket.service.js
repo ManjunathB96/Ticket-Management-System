@@ -52,7 +52,6 @@ export const followUp = async (req) => {
   newFollowUp.push(req.body);
   let newData;
   if (data) {
-    console.log('inside if  ----->', ticketId);
     newData = await Ticket.findOneAndUpdate(
       { Ticket_Id: ticketId },
       {

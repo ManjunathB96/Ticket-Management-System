@@ -55,8 +55,8 @@ export const addNewEngineer = async (req, res, next) => {
   try {
     const data = await BatchService.addNewEngineer(req);
     console.log('engg controller --->', data);
-    res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
+    res.status(HttpStatus.CREATED).json({
+      code: HttpStatus.CREATED,
       data: data,
       message: 'Engineer added successfully'
     });
