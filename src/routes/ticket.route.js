@@ -3,20 +3,17 @@ import * as ticketController from '../controllers/ticket.controller';
 import { userAuth } from '../middlewares/auth.middleware';
 import { roleCheck } from '../middlewares/roleCheck.middleware';
 import { upload } from '../utils/fileUpload.util';
-
-
 const router = express.Router();
-
-var type=upload.single('file')
+let uploadFile=upload.single('file')
 
 
 //route for  create_ticket
-router.post('/raiseTicket/:CIC_Id',type,userAuth,roleCheck,ticketController.raiseNewTicket);
+router.post('/raiseTicket/:cicId',uploadFile,userAuth,ticketController.raiseTicket);
 
 //route to add follow up
-router.put('/followUP/:Ticket_Id',userAuth,roleCheck,ticketController.followUp);
+router.put('/addFollowUP/:ticketId',userAuth,roleCheck,ticketController.followUp);
 
 //route to single ticket
-router.get('/getTicket/:Ticket_Id', userAuth, ticketController.getSingleTicket);
+router.get('/getTicket/:ticketId', userAuth, ticketController.getTicket);
 
 export default router;

@@ -2,14 +2,13 @@ import User from '../models/user.model';
 const bcrypt = require('bcrypt');
 import jwt from 'jsonwebtoken';
 
-
 //get all users
 export const getAll = async () => {
   const data = await User.find();
   return data;
 };
 
-//create new users
+//create new user
 export const registration = async (body) => {
   const result = await User.findOne({ email: body.email });
   if (result == null) {
@@ -23,18 +22,15 @@ export const registration = async (body) => {
   }
 };
 
-
-// users login
+//user login
 export const login = async (body) => {
   const data = await User.findOne({ email: body.email });
-  const isMatch = bcrypt.compareSync(body.password, data.password);
-  if (data && isMatch) {
-    const token = jwt.sign(
-      { email: data.email, role: data.role, _id: data._id },
-      process.env.SECRET_KEY
-    );
-    return token;
-  } else {
-    throw new Error('Invalid Credentials');
+  if (!data) {
+    throw new Error('Invalid email id');
   }
+  if (!bcrypt.compareSync(body.password, data.password)) {
+    throw new Error('Invalid password');
+  }
+  const token = jwt.sign({ email: data.email, role: data.role, _id: data._id }, process.env.SECRET_KEY);
+  return token;
 };

@@ -43,7 +43,7 @@ export const registration = async (req, res, next) => {
 };
 
 /**
- * Controller to login users
+ * Controller to user login 
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next

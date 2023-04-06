@@ -2,10 +2,10 @@ import { Schema, model } from 'mongoose';
 
 const batchSchema = new Schema(
   {
-    userId: {
+    createdBy: {    
       type: String
     },
-    batches: {
+    batch: {
       batchName: {
         type: String
       },

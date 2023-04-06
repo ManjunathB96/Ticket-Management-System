@@ -112,14 +112,14 @@
         ]
       }
     },
-    "/batches/addEngineers": {
+    "/batches/addEngineers/{batchId}": {
       "put": {
         "tags": ["Batch"],
         "description": "add Engineer",
         "produces": [],
         "parameters": [
           {
-            "name": "_id",
+            "name": "batchId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -131,13 +131,117 @@
             "required": false,
             "type": "string",
             "schema": {
-              "$ref": "#/definitions/Batch"
+              "$ref": "#/definitions/EngineerDetail"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Engineer added succesfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/tickets/raiseTicket/{cicId}": {
+      "post": {
+        "tags": ["Ticket"],
+        "description": "Raise Ticket",
+        "produces": [],
+        "parameters": [
+          {
+            "name": "cicId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "create ticket",
+            "in": "body",
+            "description": "create ticket",
+            "required": false,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Ticket raised succesfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/tickets/getTicket/{ticketId}": {
+      "get": {
+        "tags": ["Ticket"],
+        "description": "Get single ticket ",
+        "produces": [],
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket fetched successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/tickets/followUP/{ticketId}": {
+      "put": {
+        "tags": ["Ticket"],
+        "description": "add followup",
+        "produces": [],
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Add followup",
+            "in": "body",
+            "description": "Add followup",
+            "required": false,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definitions/Followup"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Followup added succesfully"
           },
           "500": {
             "description": "Internal server error"
@@ -210,6 +314,66 @@
           "type": "string"
         },
         "engineers": {
+          "type": "string"
+        }
+      }
+    },
+    "EngineerDetail": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "Ticket": {
+      "type": "object",
+      "properties": {
+        "ticketName": {
+          "type": "string"
+        },
+        "engineerName": {
+          "type": "string"
+        },
+        "issueType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "additionInfo": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "assignedTo": {
+          "type": "string"
+        },
+        "followUp": {
+          "type": "string"
+        }
+      }
+    },
+    "Followup": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "date": {
           "type": "string"
         }
       }

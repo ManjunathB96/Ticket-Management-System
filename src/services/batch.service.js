@@ -8,83 +8,62 @@ export const getAll = async () => {
 };
 
 //create new batch
-export const createNewBatch = async (userId, body) => {
-  const batch = await Batch.findOne({ 'batches.batchName': body.batchName });
-  if (batch == null) {
-    const data = await Batch.create({
-      userId: userId,
-      batches: {
-        batchName: body.batchName,
-        startDate: body.startDate,
-        endDate: body.endDate,
-        batchTechType: body.batchTechType,
-        practiceHead: body.practiceHead,
-        mainMentor: body.mainMentor
-      }
+export const createNewBatch = async (body) => {
+  const batchDetails = await Batch.findOne({
+    'batch.batchName': body.batchName
+  });
+  if (!batchDetails) {
+    const createBatch = await Batch.create({
+      createdBy: body.userId,
+      batch: body
     });
-    return data;
+    return createBatch;
   }
-  let newData;
-  if (batch) {
-    let newBody = { ...batch.batches, ...body };
-    newData = await Batch.findOneAndUpdate(
-      { 'batches.batchName': body.batchName },
-      { batches: newBody },
+  if (batchDetails) {
+    let newBody = { ...batchDetails.batch, ...body };
+    let newBatch = await Batch.findOneAndUpdate(
+      { 'batch.batchName': body.batchName },
+      { batch: newBody },
       { new: true }
     );
-    return newData;
+    return newBatch;
   }
 };
 
 //add new engineer
-export const addNewEngineer = async (req) => {
-  const batchname = req.query.batchName;
-  const data = await Batch.findOne({ 'batches.batchName': batchname });
-
-  console.log("engg service---->",data);
-
-  let cicId = utils.randomeCode();
-  let randomNum = 'CIC-ID-' + cicId;
-  const enggObj = {};
-  enggObj['CIC_Id'] = randomNum;
-  enggObj['fullName'] = req.body.fullName;
-  enggObj['phoneNumber'] = req.body.phoneNumber;
-  enggObj['email'] = req.body.email;
-  enggObj['status'] = req.body.status;
-
-  console.log("engg obj====>",enggObj);
-
-  let newData;
-  if (data) {
-
-    let engineers = data.batches.engineers;
-    let enggIdx;
-    for (let i = 0; i < engineers.length; i++) {
-      if (engineers[i].email === enggObj.email) {
-        enggIdx = i;
-        break;
-      }
-    }
-    if (enggIdx >= 0) {
-      console.log("inside if idx---->",enggIdx);
-      engineers.splice(enggIdx, 1, enggObj);
-    } else {
-      engineers.push(enggObj);
-    }
-    newData = await Batch.updateOne(
-      { 'batches.batchName': batchname },
-      {
-        batches: {
-          batchName: data.batches.batchName,
-          startDate: data.batches.startDate,
-          endDate: data.batches.endDate,
-          batchTechType: data.batches.batchTechType,
-          practiceHead: data.batches.practiceHead,
-          mainMentor: data.batches.mainMentor,
-          engineers
-        }
-      }
-    );
-    return newData;
+export const addNewEngineer = async (batchId, body) => {
+  const batchDetails = await Batch.findOne({ _id: batchId });
+  const randomNum = utils.randomeCode();
+  const CICId = 'CIC-ID-' + randomNum;
+  const enggObj = { CIC_Id: CICId, ...body };
+  if (!batchDetails) {
+    throw new Error('Batch does not exists');
   }
+  let newData;
+  let engineers = batchDetails.batch.engineers;
+  let enggIdx = engineers.findIndex((eng) => eng.email === enggObj.email);
+
+  if (enggIdx >= 0) {
+    engineers.splice(enggIdx, 1, enggObj);
+  } else {
+    engineers.push(enggObj);
+  }
+  newData = await Batch.findOneAndUpdate(
+    { _id: batchId },
+    { 'batch.engineers': engineers },
+    { new: true }
+  );
+  return newData;
+};
+
+//get all batch
+export const getEngineer = async (CICId) => {
+  const batchDetails = await Batch.findOne({ 'batch.engineers.CIC_Id': CICId });
+  if (!batchDetails) {
+    throw new Error('Engineer does not exists');
+  }
+  const engineer = batchDetails.batch.engineers.find(
+    (eng) => eng.CIC_Id === CICId
+  );
+  return engineer;
 };
