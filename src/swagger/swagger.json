@@ -150,6 +150,34 @@
         ]
       }
     },
+    "/batches/getEngineer/{cicId}": {
+      "get": {
+        "tags": ["Batch"],
+        "description": "Engineer details ",
+        "produces": [],
+        "parameters": [
+          {
+            "name": "cicId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Engineer data fetched successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/tickets/raiseTicket/{cicId}": {
       "post": {
         "tags": ["Ticket"],
@@ -216,7 +244,7 @@
         ]
       }
     },
-    "/tickets/followUP/{ticketId}": {
+    "/tickets/addFollowup/{ticketId}": {
       "put": {
         "tags": ["Ticket"],
         "description": "add followup",
@@ -312,9 +340,6 @@
         },
         "mainMentor": {
           "type": "string"
-        },
-        "engineers": {
-          "type": "string"
         }
       }
     },
@@ -360,9 +385,6 @@
           "type": "string"
         },
         "assignedTo": {
-          "type": "string"
-        },
-        "followUp": {
           "type": "string"
         }
       }

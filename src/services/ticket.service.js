@@ -3,8 +3,9 @@ import Batch from '../models/batch.model';
 import * as utils from '../utils/randomCodeGen';
 
 //get Single Ticket
-export const getTicket = async (Ticket_Id) => {
-  const data = await Ticket.findOne({ Ticket_Id });
+export const getTicket = async (ticketId) => {
+  console.log("ticket---",ticketId);
+  const data = await Ticket.findOne({"Ticket_Id":ticketId});
   if (data) {
     return data;
   } else {
@@ -16,11 +17,11 @@ export const getTicket = async (Ticket_Id) => {
 export const raiseTicket = async (CICId, body, file) => {
   const ticket = await Ticket.findOne({ CIC_Id: CICId });
 
-  let batchDetails = await Batch.findOne({ 'batch.engineers.CIC_Id': CICId });
+  let batchDetails = await Batch.findOne({ 'engineers.CIC_Id': CICId });
   if (file && file.filename) {
     body.file = `http://localhost:3000/file/${file.filename}`;
   }
-  const engineers = batchDetails.batch.engineers;
+  const engineers = batchDetails.engineers;
   let fulName = engineers.find((eng) => eng.CIC_Id === CICId).fullName;
 
   if (!ticket) {
@@ -28,7 +29,7 @@ export const raiseTicket = async (CICId, body, file) => {
     let ticketId = 'TIK-ID-' + randomNum;
 
     const data = await Ticket.create({
-      createdBy: body.userId,
+      raisedBy: body.userId,
       Ticket_Id: ticketId,
       CIC_Id: CICId,
       engineerName: fulName,
@@ -44,7 +45,7 @@ export const raiseTicket = async (CICId, body, file) => {
 };
 
 //add follow up
-export const followUp = async (ticketId, body) => {
+export const addfollowup = async (ticketId, body) => {
   const ticketDetails = await Ticket.findOne({ Ticket_Id: ticketId });
   if (!ticketDetails) {
     throw new Error('Ticket does not exists');
@@ -54,7 +55,7 @@ export const followUp = async (ticketId, body) => {
     {
       $push: {
         followUp: {
-          createdBy: body.userId,
+          followupBy: body.userId,
           ...body
         }
       }

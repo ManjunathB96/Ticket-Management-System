@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const ticketSchema = new Schema(
   {
-    createdBy: {
+    raisedBy: {
       type: String
     },
     Ticket_Id: {
@@ -37,7 +37,7 @@ const ticketSchema = new Schema(
     },
     followUp: [
       {
-        createdBy: {
+        followupBy: {
           type: String
         },
         description: {

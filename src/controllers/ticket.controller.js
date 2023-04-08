@@ -10,10 +10,8 @@ import * as ticketService from '../services/ticket.service';
  * @param {Function} next
  */
 export const getTicket = async (req, res, next) => {
-  console.log("get into controller");
   try {
-    const data = await ticketService.getTicket(req.params.Ticket_Id);
-    console.log("data ===--->",data);
+    const data = await ticketService.getTicket(req.params.ticketId);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,
@@ -52,10 +50,10 @@ export const raiseTicket = async (req, res, next) => {
  * @param {object} res - response object
  * @param {Function} next
  */
-export const followUp = async (req, res, next) => {
+export const addfollowup = async (req, res, next) => {
   console.log("inside controller ");
   try {
-    const data = await ticketService.followUp(req.params.ticketId,req.body);
+    const data = await ticketService.addfollowup(req.params.ticketId,req.body);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,
