@@ -9,9 +9,9 @@ import * as ticketService from '../services/ticket.service';
  * @param {object} res - response object
  * @param {Function} next
  */
-export const getTicket = async (req, res, next) => {
+export const getTicketDetails = async (req, res, next) => {
   try {
-    const data = await ticketService.getTicket(req.params.ticketId);
+    const data = await ticketService.getTicketDetails(req.params.ticketId);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,

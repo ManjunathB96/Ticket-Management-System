@@ -7,9 +7,9 @@ import * as BatchService from '../services/batch.service';
  * @param {object} res - response object
  * @param {Function} next
  */
-export const getAll = async (req, res, next) => {
+export const getAllBatchDetails = async (req, res, next) => {
   try {
-    const data = await BatchService.getAll();
+    const data = await BatchService.getAllBatchDetails();
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,
@@ -71,9 +71,9 @@ export const addNewEngineer = async (req, res, next) => {
  * @param {object} res - response object
  * @param {Function} next
  */
-export const getEngineer= async (req, res, next) => {
+export const getEngineerDetails= async (req, res, next) => {
   try {
-    const data = await BatchService.getEngineer(req.params.cicId);
+    const data = await BatchService.getEngineerDetails(req.params.cicId);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       data: data,

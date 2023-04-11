@@ -15,6 +15,6 @@ router.post('/raiseTicket/:cicId',uploadFile,ticketValidator,userAuth,ticketCont
 router.put('/addFollowup/:ticketId',userAuth,roleCheck,ticketController.addfollowup);
 
 //route to get single ticket
-router.get('/getTicket/:ticketId', userAuth, ticketController.getTicket);
+router.get('/getTicket/:ticketId', userAuth, ticketController.getTicketDetails);
 
 export default router;

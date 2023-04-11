@@ -3,13 +3,13 @@ const bcrypt = require('bcrypt');
 import jwt from 'jsonwebtoken';
 
 //get all users
-export const getAll = async () => {
+export const getAllUsers = async () => {
   const data = await User.find();
   return data;
 };
 
 //create new user
-export const registration = async (body) => {
+export const userRegistration = async (body) => {
   const result = await User.findOne({ email: body.email });
   if (result == null) {
     const saltRounds = 10;

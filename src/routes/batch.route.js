@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 //route to all batches
-router.get('', userAuth, batchController.getAll);
+router.get('', userAuth, batchController.getAllBatchDetails);
 
 //route to create a new batch
 router.post('',newBatchValidator,userAuth,roleCheck,batchController.createNewBatch);
@@ -17,6 +17,6 @@ router.post('',newBatchValidator,userAuth,roleCheck,batchController.createNewBat
 router.put('/addEngineers/:batchId',newEngineerValidator,userAuth,roleCheck,batchController.addNewEngineer);
 
 //route to engineer details
-router.get('/getEngineer/:cicId', userAuth, batchController.getEngineer);
+router.get('/getEngineer/:cicId', userAuth, batchController.getEngineerDetails);
 
 export default router;

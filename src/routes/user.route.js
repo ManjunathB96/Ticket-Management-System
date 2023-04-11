@@ -7,10 +7,10 @@ import { loginValidator } from '../validators/login.validator';
 const router = express.Router();
 
 //route to get a single user details
-router.get('', userAuth, userController.getAll);
+router.get('', userAuth, userController.getAllUsers);
 
 //route to create a new user
-router.post('', newUserValidator, userController.registration);
+router.post('', newUserValidator, userController.userRegistration);
 
 //route to login
 router.post('/login',loginValidator, userController.login);

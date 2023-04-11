@@ -3,7 +3,7 @@ import Batch from '../models/batch.model';
 import * as utils from '../utils/randomCodeGen';
 
 //get Single Ticket
-export const getTicket = async (ticketId) => {
+export const getTicketDetails = async (ticketId) => {
   console.log("ticket---",ticketId);
   const data = await Ticket.findOne({"Ticket_Id":ticketId});
   if (data) {

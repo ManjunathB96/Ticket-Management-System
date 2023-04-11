@@ -2,7 +2,7 @@ import Batch from '../models/batch.model';
 import * as utils from '../utils/randomCodeGen';
 
 //get all batch
-export const getAll = async () => {
+export const getAllBatchDetails = async () => {
   const data = await Batch.find();
   return data;
 };
@@ -51,7 +51,7 @@ export const addNewEngineer = async (batchId, body) => {
 };
 
 //get engineer details
-export const getEngineer = async (CICId) => {
+export const getEngineerDetails = async (CICId) => {
   const batchDetails = await Batch.findOne({ 'engineers.CIC_Id': CICId });
   if (!batchDetails) {
     throw new Error('Engineer does not exists');
