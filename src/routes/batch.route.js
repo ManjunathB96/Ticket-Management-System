@@ -14,7 +14,7 @@ router.get('', userAuth, batchController.getAllBatchDetails);
 router.post('',newBatchValidator,userAuth,roleCheck,batchController.createNewBatch);
 
 //route for  add new Engineer
-router.put('/addEngineers/:batchId',newEngineerValidator,userAuth,roleCheck,batchController.addNewEngineer);
+router.put('/:batchId',newEngineerValidator,userAuth,roleCheck,batchController.addNewEngineer);
 
 //route to engineer details
 router.get('/getEngineer/:cicId', userAuth, batchController.getEngineerDetails);

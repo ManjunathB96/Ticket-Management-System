@@ -14,7 +14,7 @@
     "/users": {
       "post": {
         "tags": ["User"],
-        "description": "create new user...",
+        "description": "create new user",
         "parameters": [
           {
             "name": "Register new name",
@@ -112,7 +112,7 @@
         ]
       }
     },
-    "/batches/addEngineers/{batchId}": {
+    "/batches/{batchId}": {
       "put": {
         "tags": ["Batch"],
         "description": "add Engineer",
@@ -178,7 +178,7 @@
         ]
       }
     },
-    "/tickets/raiseTicket/{cicId}": {
+    "/tickets/{cicId}": {
       "post": {
         "tags": ["Ticket"],
         "description": "Raise Ticket",
@@ -216,7 +216,7 @@
         ]
       }
     },
-    "/tickets/getTicket/{ticketId}": {
+    "/tickets/{ticketId}": {
       "get": {
         "tags": ["Ticket"],
         "description": "Get single ticket ",

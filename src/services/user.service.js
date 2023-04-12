@@ -23,7 +23,7 @@ export const userRegistration = async (body) => {
 };
 
 //user login
-export const login = async (body) => {
+export const userLogin = async (body) => {
   const data = await User.findOne({ email: body.email });
   if (!data) {
     throw new Error('Invalid email id');

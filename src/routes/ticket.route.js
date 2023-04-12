@@ -9,12 +9,12 @@ let uploadFile=upload.single('file')
 
 
 //route for  create_ticket
-router.post('/raiseTicket/:cicId',uploadFile,ticketValidator,userAuth,ticketController.raiseTicket);
+router.post('/:cicId',uploadFile,ticketValidator,userAuth,ticketController.raiseTicket);
 
 //route to add follow up
 router.put('/addFollowup/:ticketId',userAuth,roleCheck,ticketController.addfollowup);
 
 //route to get single ticket
-router.get('/getTicket/:ticketId', userAuth, ticketController.getTicketDetails);
+router.get('/:ticketId', userAuth, ticketController.getTicketDetails);
 
 export default router;

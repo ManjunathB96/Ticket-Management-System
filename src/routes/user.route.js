@@ -13,6 +13,6 @@ router.get('', userAuth, userController.getAllUsers);
 router.post('', newUserValidator, userController.userRegistration);
 
 //route to login
-router.post('/login',loginValidator, userController.login);
+router.post('/login',loginValidator, userController.userLogin);
 
 export default router;

@@ -48,9 +48,9 @@ export const userRegistration = async (req, res, next) => {
  * @param {object} res - response object
  * @param {Function} next
  */
-export const login = async (req, res, next) => {
+export const userLogin = async (req, res, next) => {
   try {
-    const data = await UserService.login(req.body);
+    const data = await UserService.userLogin(req.body);
     if (data) {
       res.status(HttpStatus.ACCEPTED).json({
         code: HttpStatus.ACCEPTED,
