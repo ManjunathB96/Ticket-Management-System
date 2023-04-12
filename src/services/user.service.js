@@ -15,7 +15,13 @@ export const userRegistration = async (body) => {
     const saltRounds = 10;
     const hashPwd = bcrypt.hashSync(body.password, saltRounds);
     body.password = hashPwd;
-    const data = await User.create(body);
+    const userCreated = await User.create(body);
+    console.log("user -------",userCreated);
+    const data={}
+    data["_id"] =userCreated._id
+    data["fullName"] =userCreated.fullName
+    data["role"] =userCreated.role
+    data["email"] =userCreated.email
     return data;
   } else {
     throw new Error('User already exist');
