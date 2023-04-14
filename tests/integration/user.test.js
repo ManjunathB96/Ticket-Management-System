@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import HttpStatus from 'http-status-codes';
 
 import app from '../../src/index';
+import { log } from 'winston';
 
 let token;
 describe('User APIs Test', () => {
@@ -65,6 +66,7 @@ describe('User APIs Test', () => {
 
   var cicId;
   var batchId;
+  var ticketId;
   describe('POST/createNewBatch', () => {
     const batchDetails = {
       batchName: 'CFP-130-NodeJS',
@@ -112,16 +114,15 @@ describe('User APIs Test', () => {
         .set('Authorization', `Bearer ${token}`)
         .send(engineerDetails)
         .end((err, res) => {
-        // const arr= res.body.data.engineers;
-        //   cicId = arr.includes(arr.CIC_Id[0]) 
-        //   console.log("cicId=======",cicId);
+          const arr = res.body.data.engineers;
+          cicId = arr[0].CIC_Id;
           expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
           done();
         });
     });
   });
 
-    describe('GET/getEngineer/:cicId', () => {
+  describe('GET/getEngineer/:cicId', () => {
     it('get all batch details it should return 200', (done) => {
       request(app)
         .get(`/api/v1/batches/getEngineer/${cicId}`)
@@ -132,4 +133,59 @@ describe('User APIs Test', () => {
         });
     });
   });
+
+  describe('POST/raiseTicket', () => {
+    const ticketDetails = {
+      ticketName:'Installation Problem',
+      engineerName:'Tanu Belagavi',
+      issueType:'File missing',
+      description:'During installation of redis in the system environment variables file path is not added',
+      additionInfo:'NO',
+      file:'No',
+      status:'Open',
+      assignedTo:'Admin'
+    };
+    it('Given ticket details should return 201 and raise ticket', (done) => {
+      request(app)
+        .post(`/api/v1/tickets/${cicId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(ticketDetails)
+        .end((err, res) => {
+          ticketId = res.body.data.Ticket_Id;
+          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
+          done();
+        });
+    });
+  });
+
+  
+  describe('getTicketDetails  using ticketId', () => {
+    it('get ticket details it should return 200', (done) => {
+      request(app)
+        .get(`/api/v1/tickets/${ticketId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          done();
+        });
+    });
+  });
+
+  describe('PUT add followup', () => {
+    const followupDetails = {
+      "description":"Follow the redis document to install it",
+      "date":"29-April-2023"
+    };
+    it('add followup using ticketId should return 200', (done) => {
+      request(app)
+        .put(`/api/v1/tickets/addFollowup/${ticketId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(followupDetails)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          done();
+        });
+    });
+  });
+
 });
