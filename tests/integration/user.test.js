@@ -48,7 +48,7 @@ describe('User APIs Test', () => {
   });
 
   describe('POST/userLogin', () => {
-    it('given valid User Login details it should return 200', (done) => {
+    it('given valid User Login details it should return 202', (done) => {
       const loginDetails = {
         email: 'rajesh123@gmail.com',
         password: 'Rajesh@123'
@@ -171,7 +171,7 @@ describe('User APIs Test', () => {
     });
   });
 
-  describe('PUT add followup', () => {
+  describe('add followup using ticketId', () => {
     const followupDetails = {
       "description":"Follow the redis document to install it",
       "date":"29-April-2023"
