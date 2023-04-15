@@ -16,7 +16,6 @@ export const userRegistration = async (body) => {
     const hashPwd = bcrypt.hashSync(body.password, saltRounds);
     body.password = hashPwd;
     const userCreated = await User.create(body);
-    console.log("user -------",userCreated);
     const data={}
     data["_id"] =userCreated._id
     data["fullName"] =userCreated.fullName
