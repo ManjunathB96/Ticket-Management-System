@@ -57,5 +57,7 @@ export const getEngineerDetails = async (CICId) => {
     throw new Error('Engineer does not exists');
   }
   const engineer = batchDetails.engineers.find((eng) => eng.CIC_Id === CICId);
+
+  console.log("engg====",engineer);
   return engineer;
 };

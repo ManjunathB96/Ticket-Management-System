@@ -26,7 +26,7 @@ export const getAllUsers = async (req, res, next) => {
  * @param {object} res - response object
  * @param {Function} next
  */
-export const userRegistration = async (req, res, next) => {
+export const userRegistration = async (req, res) => {
   try {
     const data = await UserService.userRegistration(req.body);
     res.status(HttpStatus.CREATED).json({
@@ -48,7 +48,7 @@ export const userRegistration = async (req, res, next) => {
  * @param {object} res - response object
  * @param {Function} next
  */
-export const userLogin = async (req, res, next) => {
+export const userLogin = async (req, res) => {
   try {
     const data = await UserService.userLogin(req.body);
     if (data) {

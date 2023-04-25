@@ -3,6 +3,7 @@ import HttpStatus from 'http-status-codes';
 
 export const newEngineerValidator = (req, res, next) => {
   const schema = Joi.object({
+    CIC_Id:Joi.string().optional(),
     fullName: Joi.string().required(),
     phoneNumber: Joi.number().required(),
     email: Joi.string().email().required(),

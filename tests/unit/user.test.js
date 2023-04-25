@@ -1,14 +1,20 @@
-const bcrypt = require('bcrypt');
 import { expect } from 'chai';
-import request from 'supertest';
+const sinon = require('sinon');
+import * as UserService from '../../src/services/user.service';
+import * as userController from '../../src/controllers/user.controller';
+const { spy, stub } = require('sinon');
+// const chai = require('chai')
+// chai.should()
+
+// const faker = require("faker");
+const bcrypt = require('bcrypt');
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import HttpStatus from 'http-status-codes';
+import dotenv from 'dotenv';
+dotenv.config();
 
-import app from '../../src/index';
-import userModel from '../../src/models/user.model';
-
-describe('User APIs Test', () => {
-  beforeEach((done) => {
+describe('User Test', () => {
+  before((done) => {
     const clearCollections = () => {
       for (const collection in mongoose.connection.collections) {
         mongoose.connection.collections[collection].deleteOne(() => {});
@@ -16,7 +22,9 @@ describe('User APIs Test', () => {
     };
 
     const mongooseConnect = async () => {
-      await mongoose.connect(process.env.DATABASE_TEST);
+      await mongoose.connect(process.env.DATABASE_TEST, {
+        useNewUrlParser: true
+      });
       clearCollections();
     };
 
@@ -28,55 +36,37 @@ describe('User APIs Test', () => {
 
     done();
   });
-
-  describe('POST/newRegistration ', () => {
-    it('Given valid user details it should return Created', (done) => {
-      const userDetails = {
-        fullName: 'Rajesh B',
-        role: 'Admin',
-        email: 'rajesh123@gmail.com',
-        password: 'Rajesh@123'
-      };
-      request(app)
-        .post('/api/v1/users')
-        .send(userDetails)
-        .end((err, res) => {
-          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
-          done();
-        });
+  describe('user Registration', function () {
+    let status, json, res;
+    this.beforeEach(() => {
+      status = stub();
+      json = spy();
+      res = { json, status };
+      status.returns(res);
     });
-  });
-
-  describe('POST/userLogin', () => {
-    let loginDetails;
-    beforeEach((done) => {
-      const hashPwd = bcrypt.hashSync('Rajesh@123', 10);
-      userModel
-        .create({
-          fullName: 'Rajesh B',
+    it('should create new user', async function () {
+      const req = {
+        body: {
+          fullName: 'Manjunath B',
           role: 'Admin',
-          email: 'rajesh123@gmail.com',
-          password: hashPwd
-        })
-        .then((reslove) => {
-          loginDetails = {
-            email: 'rajesh123@gmail.com',
-            password: 'Rajesh@123'
-          };
-          done();
-        });
+          email: 'bbelagavi6@gmail.com',
+          password: 'Manjunath@123'
+        }
+      };
+      await userController.userRegistration(req, res);
+      expect(status.args[0][0]).to.be.equal(201);
+      expect(json.args[0][0].data.email).to.equal('bbelagavi6@gmail.com');
     });
-    it('given valid User Login details it should return 202', (done) => {
-      console.log('log details---', loginDetails);
-      request(app)
-        .post('/api/v1/users/login')
-        .send(loginDetails)
-        .end((err, res) => {
-          console.log('error----', err);
-          console.log('response----', res.body);
-          expect(res.statusCode).to.be.equal(HttpStatus.ACCEPTED);
-          done();
-        });
+
+      it('user login', async function () {
+      //const _id='64474b8d08119c3f584f165c'
+      const req = {body: { email: 'bbelagavi6@gmail.com', password: 'Manjunath@123' }};
+      await userController.userLogin(req, res);
+     // const token = jwt.sign({ email: req.body.email, role: req.body.role,_id:_id }, process.env.SECRET_KEY);
+      expect(status.args[0][0]).to.be.equal(202);
+    //  expect(json.args[0][0].data).to.equal(token);
     });
   });
+
+
 });
