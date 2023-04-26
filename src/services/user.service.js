@@ -21,7 +21,7 @@ export const userRegistration = async (body) => {
     data["fullName"] =userCreated.fullName
     data["role"] =userCreated.role
     data["email"] =userCreated.email
-    return data;
+   return data;
   } else {
     throw new Error('User already exist');
   }

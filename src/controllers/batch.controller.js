@@ -7,7 +7,7 @@ import * as BatchService from '../services/batch.service';
  * @param {object} res - response object
  * @param {Function} next
  */
-export const getAllBatchDetails = async (req, res, next) => {
+export const getAllBatchDetails = async (req, res) => {
   try {
     const data = await BatchService.getAllBatchDetails();
     res.status(HttpStatus.OK).json({
@@ -16,7 +16,10 @@ export const getAllBatchDetails = async (req, res, next) => {
       message: 'All batches fetched successfully'
     });
   } catch (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: `${error}`
+    });
   }
 };
 
@@ -49,8 +52,10 @@ export const createNewBatch = async (req, res, next) => {
  * @param {Function} next
  * */
 export const addNewEngineer = async (req, res, next) => {
+  console.log("inside controler-----------");
   try {
     const data = await BatchService.addNewEngineer(req.params.batchId,req.body);
+    console.log("data-----------",data);
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,

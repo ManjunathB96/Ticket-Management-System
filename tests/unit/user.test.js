@@ -1,72 +1,50 @@
-import { expect } from 'chai';
-const sinon = require('sinon');
-import * as UserService from '../../src/services/user.service';
-import * as userController from '../../src/controllers/user.controller';
-const { spy, stub } = require('sinon');
-// const chai = require('chai')
-// chai.should()
-
-// const faker = require("faker");
+import UserModel from '../../src/models/user.model'
+import * as UserService from '../../src/services/user.service'
+import chai from 'chai' 
+import sinon from 'sinon' 
 const bcrypt = require('bcrypt');
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
+const expect = chai.expect;
 
-describe('User Test', () => {
-  before((done) => {
-    const clearCollections = () => {
-      for (const collection in mongoose.connection.collections) {
-        mongoose.connection.collections[collection].deleteOne(() => {});
-      }
-    };
-
-    const mongooseConnect = async () => {
-      await mongoose.connect(process.env.DATABASE_TEST, {
-        useNewUrlParser: true
-      });
-      clearCollections();
-    };
-
-    if (mongoose.connection.readyState === 0) {
-      mongooseConnect();
-    } else {
-      clearCollections();
-    }
-
-    done();
-  });
-  describe('user Registration', function () {
-    let status, json, res;
-    this.beforeEach(() => {
-      status = stub();
-      json = spy();
-      res = { json, status };
-      status.returns(res);
-    });
-    it('should create new user', async function () {
-      const req = {
-        body: {
-          fullName: 'Manjunath B',
-          role: 'Admin',
-          email: 'bbelagavi6@gmail.com',
-          password: 'Manjunath@123'
-        }
-      };
-      await userController.userRegistration(req, res);
-      expect(status.args[0][0]).to.be.equal(201);
-      expect(json.args[0][0].data.email).to.equal('bbelagavi6@gmail.com');
-    });
-
-      it('user login', async function () {
-      //const _id='64474b8d08119c3f584f165c'
-      const req = {body: { email: 'bbelagavi6@gmail.com', password: 'Manjunath@123' }};
-      await userController.userLogin(req, res);
-     // const token = jwt.sign({ email: req.body.email, role: req.body.role,_id:_id }, process.env.SECRET_KEY);
-      expect(status.args[0][0]).to.be.equal(202);
-    //  expect(json.args[0][0].data).to.equal(token);
+describe("User registration", function() {
+  const userDetails = {
+    fullName: "Rajesh B",
+    role: "Admin",
+    email:"rajesh123@gmail.com",
+    password: "Rajesh@123"  
+  };
+  describe("create", function() {
+    it("should add a new user to the db", async function() {
+      const newUser = sinon.stub(UserModel, "create").returns(userDetails);
+     const stub2 = sinon.stub(UserModel, "findOne").returns(null);
+      const user = await UserService.userRegistration(userDetails);
+      expect(newUser.calledOnce).to.be.true;
+      expect(user.fullName).to.equal(userDetails.fullName);
+      expect(user.role).to.equal(userDetails.role);
+      expect(user.email).to.equal(userDetails.email);
     });
   });
-
-
 });
+
+
+describe("User login", function() {
+    const userDetails = {
+        fullName: "Rajesh B",
+        role: "Admin",
+        email:"rajesh123@gmail.com",
+        password: bcrypt.hashSync("Rajesh@123" , 10) 
+      };
+      const loginDetails = {
+        email:"rajesh123@gmail.com",
+        password: bcrypt.hashSync("Rajesh@123" , 10)
+      };
+   
+    describe("login", function() {
+      it("should login user", async function() {
+        const signinDetails = sinon.stub(UserModel, "findOne").returns(loginDetails);
+        const login = await UserService.userLogin(loginDetails);
+        expect(signinDetails.calledOnce).to.be.true;
+        expect(login.email).to.equal(loginDetails.email);
+       // expect(login.password).to.equal(loginDetails.password);
+      });
+    });
+  });
